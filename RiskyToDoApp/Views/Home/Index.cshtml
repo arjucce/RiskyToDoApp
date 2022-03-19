@@ -1,0 +1,73 @@
+﻿@model RiskyToDoApp.Models.TaskVM
+@{
+    ViewData["Title"] = "ToDo Page";
+}
+
+<form asp-action='Index' method='post'>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class='container'>
+        <div class="text-center">
+            <div class='form-group'>
+                <div class="input-group mb-3">
+                    <input type="text" asp-for='Task.Name' class="form-control">
+                    <span class="input-group-text">
+                        <button type="submit"> <img src='~/images/add.png' height='50' width='50' /> </button>
+                    </span>
+                </div>
+                <span asp-validation-for="Task.Name" class="text-danger bold"></span>
+            </div>
+        </div>
+
+
+    </div>
+</form>
+<br />
+<table class="table table-striped">
+    @foreach (var item in Model.TaskList)
+    {
+        <tr>
+            <td style='font-size:30px;'>
+                @if(item.Complete == 1)
+                {
+                    <p class='text-decoration-line-through'>@Html.DisplayFor(a => item.Name) || @Html.DisplayFor(a => item.Date)</p>                    
+                }
+                else
+                {
+                    <p>@Html.DisplayFor(a => item.Name) || @Html.DisplayFor(a => item.Date)</p>                    
+                }                                              
+            </td>
+            <td>               
+                @if(item.Importance == 0)
+                {
+                    <a asp-action="Important" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark as Important"> <img src="~/images/eStar.png" height='50' width='50' /> </a>                    
+                }
+                else
+                {
+                    <a asp-action="Important" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark as not Important"> <img src="~/images/star.png" height='50' width='50' /> </a>
+                }
+                
+                @if(item.Complete == 0)
+                {
+                    <a asp-action="Complete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark as Complete" ><img src="~/images/confirmation.png" height='50' width='50' /> </a>
+                }
+                else
+                {
+                    <a asp-action="Complete" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Mark as not Complete" ><img src="~/images/checked.png" height='50' width='50' /> </a>                
+                }
+                
+                <a asp-action="Remove" asp-route-id="@item.Id" data-bs-toggle="tooltip" data-bs-placement="top" title="Remove the task" ><img src="~/images/remove.png" height='50' width='50' /> </a>                                
+            </td>
+        </tr>
+    }
+</table>
+
+
+
+
+
+
+@section Scripts {
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+}
+}
